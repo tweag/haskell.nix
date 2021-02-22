@@ -93,7 +93,7 @@ in the files or on the command line (they are all optional):
   projectFileName = "stack.yaml";    # use this project file
   tools.haskell-language-server = "latest";
   tools.hlint = "latest";            # Include the latest hls and hlint in the shell
-  index-state = "2021-02-22T00:00:00Z" # It is normally best to put this in `cabal.project` (not here)
+  index-state = "2021-02-22T00:00:00Z"; # It is normally best to put this in `cabal.project` (not here)
 
 # PLUS MANY MORE!  Almost any argument you can pass to the project functions
 # or to `shellFor` can be used in as a hix configuration argument.
