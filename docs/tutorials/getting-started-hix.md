@@ -1,4 +1,4 @@
-# Getting started with hix
+# Getting started with Hix
 
 The `hix` tools are wrappers for the various `nix` tools that
 use `haskell.nix` without the need to add any `.nix` files.
@@ -96,7 +96,7 @@ in the files or on the command line (they are all optional):
   index-state = "2021-02-22T00:00:00Z"; # It is normally best to put this in `cabal.project` (not here)
 
 # PLUS MANY MORE!  Almost any argument you can pass to the project functions
-# or to `shellFor` can be used in as a hix configuration argument.
+# or to `shellFor` can be used in as a Hix configuration argument.
 
 }
 ```
