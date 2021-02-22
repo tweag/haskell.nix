@@ -87,13 +87,13 @@ in the files or on the command line (they are all optional):
 
 ```nix
 { name = "hello";                    # for better error messages and derivation names
-, nixpkgsPin = "nixpkgs-unstable";   # or nixpkgs-2009 or nixpkgs-2003
-, nixpkgs = <nixpkgs>;               # use this instead of nixpkgsPin
-, subDir = "some/sub/dir";           # sub dir containing the haskell project
-, projectFileName = "stack.yaml";    # use this project file
-, tools.haskell-language-server = "latest";
-, tools.hlint = "latest";            # Include the latest hls and hlint in the shell
-, index-state = "2021-02-22T00:00:00Z" # It is normally best to put this in `cabal.project` (not here)
+  nixpkgsPin = "nixpkgs-unstable";   # or nixpkgs-2009 or nixpkgs-2003
+  nixpkgs = <nixpkgs>;               # use this instead of nixpkgsPin
+  subDir = "some/sub/dir";           # sub dir containing the haskell project
+  projectFileName = "stack.yaml";    # use this project file
+  tools.haskell-language-server = "latest";
+  tools.hlint = "latest";            # Include the latest hls and hlint in the shell
+  index-state = "2021-02-22T00:00:00Z" # It is normally best to put this in `cabal.project` (not here)
 
 # PLUS MANY MORE!  Almost any argument you can pass to the project functions
 # or to `shellFor` can be used in as a hix configuration argument.
