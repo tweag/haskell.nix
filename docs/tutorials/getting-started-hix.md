@@ -51,7 +51,7 @@ To run `cabal build` in a nix-shell with all the dependencies required:
 ```
 cabal unpack hello
 cd hello-1.0.0.2
-hix-shell --run `cabal build`
+hix-shell --run 'cabal build'
 ```
 
 Build with nix:
@@ -73,7 +73,7 @@ The configuration arguments for `Hix` can be (from highest precedence to lowest)
 For example to build with GHC 8.8.4:
 
 ```
-hix-shell --argstr compiler-nix-name ghc884 --run `cabal build`
+hix-shell --argstr compiler-nix-name ghc884 --run 'cabal build'
 ```
 
 or add a `nix/hix.nix` or `~/.config/hix/hix.conf` file:
