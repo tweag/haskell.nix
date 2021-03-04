@@ -574,14 +574,14 @@ in {
     cabal-install-tool = {compiler-nix-name, ...}@args:
       (final.haskell-nix.hackage-package ({
         name = "cabal-install";
-        version = "3.2.0.0";
+        version = "3.4.0.0";
         index-state = final.haskell-nix.internalHackageIndexState;
         # When building cabal-install (only happens when checking materialization)
         # disable checking of the tools used to avoid infinite recursion.
         cabal-install = final.evalPackages.haskell-nix.cabal-install-unchecked.${compiler-nix-name};
         nix-tools = final.evalPackages.haskell-nix.nix-tools-unchecked.${compiler-nix-name};
         materialized = ../materialized + "/${compiler-nix-name}/cabal-install";
-      } // args)).components.exes.cabal;
+      } // args)).getComponent "exe:cabal";
     nix-tools-set = { compiler-nix-name, ... }@args:
       let
         project =
@@ -617,7 +617,22 @@ in {
                 ];
             }];
           } // args);
-        exes = project.nix-tools.components.exes // project.hpack.components.exes;
+        exes =
+          let
+            package = project.getPackage "nix-tools";
+          in (builtins.map (name: package.getComponent "exe:${name}") [
+            "cabal-to-nix"
+            "hashes-to-nix"
+            "plan-to-nix"
+            "hackage-to-nix"
+            "lts-to-nix"
+            "stack-to-nix"
+            "truncate-index"
+            "stack-repos"
+            "cabal-name"
+          ]) ++ [
+            (project.getComponent "hpack:exe:hpack")
+          ];
         tools = [
           final.buildPackages.nix
           # Double buildPackages is intentional, see comment in lib/default.nix for details.
@@ -626,7 +641,7 @@ in {
     in
       final.symlinkJoin {
         name = "nix-tools";
-        paths = builtins.attrValues exes;
+        paths = exes;
         buildInputs = [ final.makeWrapper ];
         meta.platforms = final.lib.platforms.all;
         # We wrap the -to-nix executables with the executables from `tools` (e.g. nix-prefetch-git)
@@ -659,7 +674,7 @@ in {
           # a version of GHC for which there will be.
           if __pathExists (../materialized + "/${compiler-nix-name}/cabal-install/default.nix")
             then compiler-nix-name
-            else "ghc865";
+            else "ghc8104";
         checkMaterialization = false;
       }) final.haskell-nix.compiler;
     nix-tools = final.lib.mapAttrs (compiler-nix-name: _:
@@ -671,7 +686,7 @@ in {
           # a version of GHC for which there will be.
           if __pathExists (../materialized + "/${compiler-nix-name}/nix-tools/default.nix")
             then compiler-nix-name
-            else "ghc865";
+            else "ghc8104";
         checkMaterialization = false;
       }) final.haskell-nix.compiler;
 
@@ -774,7 +789,7 @@ in {
                 version = "1.24.4";
                 inherit ghcOverride nix-tools cabal-install index-state;
                 materialized = ../materialized/bootstrap + "/${buildBootstrapper.compilerNixName}/hscolour";
-            } // args)).components.exes.HsColour;
+            } // args)).getComponent "exe:HsColour";
             hscolour = bootstrap.packages.hscolour-tool {};
             hscolour-unchecked = bootstrap.packages.hscolour-tool { checkMaterialization = false; };
         };
