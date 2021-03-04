@@ -586,6 +586,20 @@ final: prev: {
                 rawProject.projectFunction pkgs.haskell-nix rawProject.projectArgs
               ) final.pkgsCross) // { recurseForDerivations = false; };
 
+            # Add support for passing in `cross` argument
+            shellFor = shellArgs:
+              let
+                args' = builtins.removeAttrs shellArgs [ "crossPlatforms" ];
+              in rawProject.hsPkgs.shellFor (args' //
+                final.lib.optionalAttrs (shellArgs ? crossPlatforms) {
+                  inputsFrom = builtins.map (pkgs:
+                    (rawProject.projectFunction pkgs.haskell-nix rawProject.projectArgs).shellFor (args' // {
+                      buildInputs = [];
+                      nativeBuildInputs = [];
+                    }))
+                    (shellArgs.crossPlatforms final.pkgsCross);
+                });
+
             # Like `.hsPkgs.${packageName}` but when compined with `getComponent` any
             # cabal configure errors are defered until the components derivation builds.
             getPackage = packageName:
@@ -681,7 +695,7 @@ final: prev: {
                         (package.components.tests)
                   ) packageNames);
               };
-            inherit (rawProject.hsPkgs) makeConfigFiles ghcWithHoogle ghcWithPackages shellFor;
+            inherit (rawProject.hsPkgs) makeConfigFiles ghcWithHoogle ghcWithPackages;
           });
 
         cabalProject =
