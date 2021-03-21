@@ -68,14 +68,6 @@ in { haskell-nix = prev.haskell-nix // {
       ];
     };
 
-    haskell-language-server = {
-      cabalProject = ''
-        packages: .
-        allow-newer: haskell-language-server:ghcide
-        constraints: ghcide <0.7.4, hls-plugin-api <0.7.1.0, hls-retrie-plugin <0.1.1.1, haddock-library <1.10
-      '';
-    };
-
     # See https://github.com/input-output-hk/haskell.nix/issues/948
     postgrest = {
       cabalProject = ''
